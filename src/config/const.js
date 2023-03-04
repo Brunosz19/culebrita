@@ -23,4 +23,4 @@ const PLAYER_TWO = {
   }
 }
 
-export { UNIT, BOARD_SIZE }
+export { UNIT, BOARD_SIZE, PLAYER_ONE, PLAYER_TWO }
