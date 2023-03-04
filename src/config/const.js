@@ -1,16 +1,23 @@
 const UNIT = 15;
 const BOARD_SIZE = 750;
 
+const DIRECTION = {
+  LEFT: { x: -UNIT, y: 0 },
+  RIGHT: { x: +UNIT, y: 0 },
+  UP: { x: 0, y: -UNIT },
+  DOWN: { x: 0, y: UNIT }
+}
+
 const PLAYER_ONE = {
   color: "#CC0000",
   id: "1",
   keys: {
-    '38': 'up',
-    '39': 'right',
-    '40': 'down',
-    '37': 'left' 
+    38: DIRECTION.UP,
+    39: DIRECTION.RIGHT,
+    40: DIRECTION.DOWN,
+    37: DIRECTION.LEFT 
   },
-  direction: 'right',
+  direction: DIRECTION.DOWN,
   position: { x: UNIT * 6, y: UNIT * 6 }
 }
 
@@ -18,12 +25,12 @@ const PLAYER_TWO = {
   color: "#0000CC",
   id: "2",
   keys: {
-    '87': 'up',
-    '68': 'right',
-    '83': 'down',
-    '65': 'left' 
+    87: DIRECTION.UP,
+    68: DIRECTION.RIGHT,
+    83: DIRECTION.DOWN,
+    65: DIRECTION.LEFT 
   },
-  direction: 'left',
+  direction: DIRECTION.UP,
   position: { x: UNIT * 43, y: UNIT * 43 }
 }
 
