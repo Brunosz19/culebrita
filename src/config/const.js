@@ -2,25 +2,29 @@ const UNIT = 15;
 const BOARD_SIZE = 750;
 
 const PLAYER_ONE = {
-  COLOR: "#CC0000",
-  ID: "1",
-  KEYS: {
+  color: "#CC0000",
+  id: "1",
+  keys: {
     '38': 'up',
     '39': 'right',
     '40': 'down',
     '37': 'left' 
-  }
+  },
+  direction: 'right',
+  position: { x: UNIT * 6, y: UNIT * 6 }
 }
 
 const PLAYER_TWO = {
-  COLOR: "#CC0000",
-  ID: "2",
-  KEYS: {
+  color: "#0000CC",
+  id: "2",
+  keys: {
     '87': 'up',
     '68': 'right',
     '83': 'down',
     '65': 'left' 
-  }
+  },
+  direction: 'left',
+  position: { x: UNIT * 43, y: UNIT * 43 }
 }
 
 export { UNIT, BOARD_SIZE, PLAYER_ONE, PLAYER_TWO }
