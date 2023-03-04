@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useRef } from "react";
+import { BOARD_SIZE, UNIT } from "../config/const";
 
-const unit = 15;
-const boardSize = 750;
 
 const CanvasBoard = styled.canvas`
   border: 1px solid #777;
@@ -22,21 +21,21 @@ function Board(){
     context.beginPath();
     context.strokeStyle = "white"
 
-    for (let i = unit * 2; i <= boardSize; i += unit * 2) {
+    for (let i = UNIT * 2; i <= BOARD_SIZE; i += UNIT * 2) {
       context.moveTo(i, 0);
-      context.lineTo(i, boardSize);
+      context.lineTo(i, BOARD_SIZE);
 
       context.moveTo(0, i);
-      context.lineTo(boardSize, i);
+      context.lineTo(BOARD_SIZE, i);
     }
-    
+
     context.stroke();  
     context.closePath();
   }, []);
 
 
   return (
-    <CanvasBoard ref={canvasRef} width={boardSize} height={boardSize} />  
+    <CanvasBoard ref={canvasRef} width={BOARD_SIZE} height={BOARD_SIZE} />  
   )
 }
 
