@@ -7,19 +7,27 @@ const initialState = [PLAYER_ONE, PLAYER_TWO];
 
 function updateGame(players, action) {
   if (action.type === "move") {
-    const newPlayers = players.map(player => ({
+    const newPlayers = players.map((player) => ({
       ...player,
-      position: { x: player.position.x + player.direction.x, y: player.position.y + player.direction.y}
-    }))
+      position: {
+        x: player.position.x + player.direction.x,
+        y: player.position.y + player.direction.y,
+      },
+    }));
     return newPlayers;
   }
 
-  if (action.type === 'changeDirection'){
-    const newPlayers = players.map(player => ({
+  if (action.type === "changeDirection") {
+    const newPlayers = players.map((player) => ({
       ...player,
-      direction: player.keys[action.key] ? player.keys[action.key] : player.direction,
-      position: { x: player.position.x + player.direction.x, y: player.position.y + player.direction.y}
-    }))
+      direction: player.keys[action.key]
+        ? player.keys[action.key]
+        : player.direction,
+      position: {
+        x: player.position.x + player.direction.x,
+        y: player.position.y + player.direction.y,
+      },
+    }));
     return newPlayers;
   }
 }
@@ -32,21 +40,21 @@ function App() {
   }, 1000);
 
   useEffect(() => {
-    function handleKeyPress(event){
+    function handleKeyPress(event) {
       const key = `${event.keyCode}`;
-      gameDispatch({ type: 'changeDirection', key })
+      gameDispatch({ type: "changeDirection", key });
     }
 
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
 
-    return function cleanUp(){
-      document.addEventListener('keydown', handleKeyPress);
-    }
+    return function cleanUp() {
+      document.addEventListener("keydown", handleKeyPress);
+    };
   }, []);
 
   return (
     <div>
-      <Board players={ players } />
+      <Board players={players} />
     </div>
   );
 }
