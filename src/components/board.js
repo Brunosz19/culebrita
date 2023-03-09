@@ -34,26 +34,8 @@ function Board({ players }) {
     function () {
       const context = canvasRef.current.getContext("2d");
       players.forEach((player) => {
-        const imageData = context.getImageData(
-          player.position.x,
-          player.position.y,
-          UNIT,
-          UNIT
-        );
-
         context.fillStyle = player.color;
         context.fillRect(player.position.x, player.position.y, UNIT, UNIT);
-
-        const pixelIndex = 0; // El índice del primer píxel
-        const redValue = imageData.data[pixelIndex];
-        const greenValue = imageData.data[pixelIndex + 1];
-        const blueValue = imageData.data[pixelIndex + 2];
-
-        if (redValue === 0 && greenValue === 0 && blueValue === 0) {
-          console.log('negro');
-        } else {
-          console.log('NOOO');
-        }
       });
     },
     [players]
