@@ -20,13 +20,12 @@ function updateGame(players, action) {
   if (action.type === "changeDirection") {
     const newPlayers = players.map((player) => ({
       ...player,
-      direction: player.keys[action.key]
-        ? player.keys[action.key]
-        : player.direction,
-      position: {
-        x: player.position.x + player.direction.x,
-        y: player.position.y + player.direction.y,
-      },
+      direction:
+        player.keys[action.key] 
+        && player.keys[action.key].x - player.direction.x !== 0
+        && player.keys[action.key].y - player.direction.y !== 0
+          ? player.keys[action.key]
+          : player.direction,
     }));
     return newPlayers;
   }
@@ -37,7 +36,7 @@ function App() {
 
   useInterval(() => {
     gameDispatch({ type: "move" });
-  }, 1000);
+  }, 100);
 
   useEffect(() => {
     function handleKeyPress(event) {
