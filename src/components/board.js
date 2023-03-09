@@ -2,22 +2,21 @@ import styled from "@emotion/styled";
 import React, { useEffect, useRef } from "react";
 import { BOARD_SIZE, UNIT } from "../config/const";
 
-
 const CanvasBoard = styled.canvas`
   border: 1px solid #777;
   outline: 1px solid #333;
   outline-offset: 5px;
   margin-top: 25px;
-`
+`;
 
-function Board({ players }){
+function Board({ players }) {
   const canvasRef = useRef();
-  
-  useEffect(function() {
-    const context = canvasRef.current.getContext('2d');
+
+  useEffect(function () {
+    const context = canvasRef.current.getContext("2d");
 
     context.beginPath();
-    context.strokeStyle = "white"
+    context.strokeStyle = "black";
 
     for (let i = UNIT * 2; i <= BOARD_SIZE; i += UNIT * 2) {
       context.moveTo(i, 0);
@@ -27,21 +26,40 @@ function Board({ players }){
       context.lineTo(BOARD_SIZE, i);
     }
 
-    context.stroke();  
+    context.stroke();
     context.closePath();
   }, []);
 
-  useEffect(function() {
-    const context = canvasRef.current.getContext('2d');
-    players.forEach(player => {
-      context.fillStyle = player.color;
-      context.fillRect(player.position.x, player.position.y, UNIT, UNIT);
-    });
-  }, [players]);
+  useEffect(
+    function () {
+      const context = canvasRef.current.getContext("2d");
+      players.forEach((player) => {
+        const imageData = context.getImageData(
+          player.position.x,
+          player.position.y,
+          UNIT,
+          UNIT
+        );
 
-  return (
-    <CanvasBoard ref={canvasRef} width={BOARD_SIZE} height={BOARD_SIZE} />  
-  )
+        context.fillStyle = player.color;
+        context.fillRect(player.position.x, player.position.y, UNIT, UNIT);
+
+        const pixelIndex = 0; // El índice del primer píxel
+        const redValue = imageData.data[pixelIndex];
+        const greenValue = imageData.data[pixelIndex + 1];
+        const blueValue = imageData.data[pixelIndex + 2];
+
+        if (redValue === 0 && greenValue === 0 && blueValue === 0) {
+          console.log('negro');
+        } else {
+          console.log('NOOO');
+        }
+      });
+    },
+    [players]
+  );
+
+  return <CanvasBoard ref={canvasRef} width={BOARD_SIZE} height={BOARD_SIZE} />;
 }
 
 export default Board;
