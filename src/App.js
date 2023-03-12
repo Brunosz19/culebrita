@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import Board from "./components/board";
 import { PLAYER_ONE, PLAYER_TWO } from "./config/const";
 import useInterval from "./hooks/useInterval";
+import getCellKey from "./utils/getCellKey";
 
 const initialState = [PLAYER_ONE, PLAYER_TWO];
 
@@ -17,13 +18,28 @@ function updateGame(players, action) {
     return newPlayers;
   }
 
+  const newPlayersWithCollision = newPlayers.map((player) => {
+    const myCellKey = getCellKey(player.position.x, player.position.y);
+    return {
+      ...player,
+      hasDied:
+        !game.playableCells.includes(myCellKey) ||
+        newPlayers
+          .filter((p) => p.id !== player.id)
+          .map((p) => getCellKey(p.position.x, p.position.y))
+          .includes(myCellKey),
+    };
+  });
+
+  const newOcupiedCells = game.
+
   if (action.type === "changeDirection") {
     const newPlayers = players.map((player) => ({
       ...player,
       direction:
-        player.keys[action.key] 
-        && player.keys[action.key].x - player.direction.x !== 0
-        && player.keys[action.key].y - player.direction.y !== 0
+        player.keys[action.key] &&
+        player.keys[action.key].x - player.direction.x !== 0 &&
+        player.keys[action.key].y - player.direction.y !== 0
           ? player.keys[action.key]
           : player.direction,
     }));
@@ -32,7 +48,7 @@ function updateGame(players, action) {
 }
 
 function App() {
-  const [players, gameDispatch] = useReducer(updateGame, initialState);
+  const [game, gameDispatch] = useReducer(updateGame, initialState);
 
   useInterval(() => {
     gameDispatch({ type: "move" });
