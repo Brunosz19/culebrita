@@ -1,4 +1,5 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
+import ReactHowler from "react-howler";
 import Board from "./components/board";
 import GameResult from "./components/result";
 import Start from "./components/start";
@@ -12,6 +13,8 @@ import {
 import useInterval from "./hooks/useInterval";
 import getCellKey from "./utils/getCellKey";
 import getPlayableCells from "./utils/playableCells";
+import { AiFillSound, AiOutlineSound } from "react-icons/ai";
+import music from "./music/anaconda.mp3";
 
 const players = [PLAYER_ONE, PLAYER_TWO];
 
@@ -67,9 +70,10 @@ function updateGame(game, action) {
     return {
       players: newPlayersWithCollision,
       playableCells: playableCells,
-      gameStatus: newPlayersWithCollision.filter((player) => player.hasDied).length === 0
-      ? GAME_STATUS.PLAYING
-      : GAME_STATUS.ENDED
+      gameStatus:
+        newPlayersWithCollision.filter((player) => player.hasDied).length === 0
+          ? GAME_STATUS.PLAYING
+          : GAME_STATUS.ENDED,
     };
   }
 
@@ -93,8 +97,9 @@ function updateGame(game, action) {
 
 function App() {
   const [game, gameDispatch] = useReducer(updateGame, initialState);
+  const [soundStatus, setSoundStatus] = useState(true);
   let result = null;
-  console.log(game.gameStatus)
+  console.log(game.gameStatus);
 
   useInterval(
     () => {
@@ -145,7 +150,27 @@ function App() {
 
   return (
     <div>
-      <h1>CULEBRITA</h1>
+      <ReactHowler src={music} playing={soundStatus} />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <h1>CULEBRITA</h1>
+        {soundStatus ? (
+          <AiFillSound
+            style={{ width: "40px", height: "40px" }}
+            onClick={() => setSoundStatus(false)}
+          />
+        ) : (
+          <AiOutlineSound
+            style={{ width: "40px", height: "40px" }}
+            onClick={() => setSoundStatus(true)}
+          />
+        )}
+      </div>
       <Board players={game.players} gameStatus={game.gameStatus} />
       {game.gameStatus === GAME_STATUS.ENDED && (
         <GameResult result={result} onClick={handleRestart} />
