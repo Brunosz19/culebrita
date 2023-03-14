@@ -1,4 +1,5 @@
-import getCellKey from 'utils/getCellKey';
+import getCellKey from "./getCellKey";
+
 
 export default function getPlayableCells(boardSize, cellSize, initialPositionPlayers) {
   const playableCells = [];

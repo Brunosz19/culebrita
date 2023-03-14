@@ -1,40 +1,59 @@
 import React, { useEffect, useReducer } from "react";
 import Board from "./components/board";
-import { PLAYER_ONE, PLAYER_TWO } from "./config/const";
+import { BOARD_SIZE, PLAYER_ONE, PLAYER_TWO, UNIT } from "./config/const";
 import useInterval from "./hooks/useInterval";
 import getCellKey from "./utils/getCellKey";
+import getPlayableCells from "./utils/playableCells";
 
-const initialState = [PLAYER_ONE, PLAYER_TWO];
+const players = [PLAYER_ONE, PLAYER_TWO];
 
-function updateGame(players, action) {
+const initialState = {
+  players,
+  playableCells: getPlayableCells(
+    BOARD_SIZE,
+    UNIT,
+    players.map((player) => getCellKey(player.position.x, player.position.y))
+  ),
+};
+
+function updateGame(game, action) {
   if (action.type === "move") {
-    const newPlayers = players.map((player) => ({
+    const newPlayers = game.players.map((player) => ({
       ...player,
       position: {
         x: player.position.x + player.direction.x,
         y: player.position.y + player.direction.y,
       },
     }));
-    return newPlayers;
+
+    const newPlayersWithCollision = newPlayers.map((player) => {
+      const myCellKey = getCellKey(player.position.x, player.position.y);
+      return {
+        ...player,
+        hasDied:
+          !game.playableCells.includes(myCellKey) ||
+          newPlayers
+            .filter((p) => p.id !== player.id)
+            .map((p) => getCellKey(p.position.x, p.position.y))
+            .includes(myCellKey),
+      };
+    });
+    
+    const newOcupiedCells = game.players.map(player => getCellKey(player.position.x, player.position.y))
+
+    const playableCells = game.playableCells.filter(playableCell => {
+      return !newOcupiedCells.includes(playableCell);
+    })
+
+    return {
+      players: newPlayersWithCollision,
+      playableCells: playableCells,
+    };
   }
 
-  const newPlayersWithCollision = newPlayers.map((player) => {
-    const myCellKey = getCellKey(player.position.x, player.position.y);
-    return {
-      ...player,
-      hasDied:
-        !game.playableCells.includes(myCellKey) ||
-        newPlayers
-          .filter((p) => p.id !== player.id)
-          .map((p) => getCellKey(p.position.x, p.position.y))
-          .includes(myCellKey),
-    };
-  });
-
-  const newOcupiedCells = game.
 
   if (action.type === "changeDirection") {
-    const newPlayers = players.map((player) => ({
+    const newPlayers = game.players.map((player) => ({
       ...player,
       direction:
         player.keys[action.key] &&
@@ -43,7 +62,10 @@ function updateGame(players, action) {
           ? player.keys[action.key]
           : player.direction,
     }));
-    return newPlayers;
+    return {
+      players: newPlayers,
+      playableCells: game.playableCells,
+    };
   }
 }
 
@@ -69,7 +91,7 @@ function App() {
 
   return (
     <div>
-      <Board players={players} />
+      <Board players={game.players} />
     </div>
   );
 }
