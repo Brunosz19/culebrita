@@ -72,9 +72,15 @@ function updateGame(game, action) {
 function App() {
   const [game, gameDispatch] = useReducer(updateGame, initialState);
 
+  const players = game.players;
+  const diedPlayers = players.filter(player => player.hasDied);
+  if (diedPlayers.length > 0) {
+    console.log(diedPlayers);
+  }
+
   useInterval(() => {
     gameDispatch({ type: "move" });
-  }, 100);
+  }, diedPlayers.length > 0 ? null : 100);
 
   useEffect(() => {
     function handleKeyPress(event) {
