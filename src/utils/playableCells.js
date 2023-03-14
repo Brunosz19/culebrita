@@ -1,7 +1,10 @@
 import getCellKey from "./getCellKey";
 
-
-export default function getPlayableCells(boardSize, cellSize, initialPositionPlayers) {
+export default function getPlayableCells(
+  boardSize,
+  cellSize,
+  initialPositionPlayers
+) {
   const playableCells = [];
   for (let i = 0; i < boardSize / cellSize; i++) {
     for (let j = 0; j < boardSize / cellSize; j++) {
