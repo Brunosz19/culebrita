@@ -158,7 +158,7 @@ function App() {
           justifyContent: "space-evenly",
         }}
       >
-        <h1>CULEBRITA</h1>
+        <h1>Anacondita</h1>
         {soundStatus ? (
           <AiFillSound
             style={{ width: "40px", height: "40px" }}
