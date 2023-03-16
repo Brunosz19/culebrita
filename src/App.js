@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import Board from "./components/board";
 import GameResult from "./components/result";
 import Start from "./components/start";
@@ -13,10 +13,8 @@ import useInterval from "./hooks/useInterval";
 import getCellKey from "./utils/getCellKey";
 import getPlayableCells from "./utils/playableCells";
 import { AiFillSound, AiOutlineSound } from "react-icons/ai";
-import { useAuth } from "./context/auth-context";
 import { Howl } from "howler";
 import music from "./music/anaconda.mp3";
-import ReactHowler from "react-howler";
 
 const players = [PLAYER_ONE, PLAYER_TWO];
 
@@ -109,7 +107,6 @@ function UpdateGame(game, action) {
 
 function App() {
   const [game, gameDispatch] = useReducer(UpdateGame, initialState);
-  const { soundStatus, setSoundStatus } = useAuth();
   let result = null;
 
   useInterval(
@@ -161,7 +158,6 @@ function App() {
 
   return (
     <div>
-      {/* <ReactHowler src={music} playing={soundStatus} /> */}
       <div
         style={{
           display: "flex",
