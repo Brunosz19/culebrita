@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer, useState } from "react";
-import ReactHowler from "react-howler";
 import Board from "./components/board";
 import GameResult from "./components/result";
 import Start from "./components/start";
@@ -14,8 +13,10 @@ import useInterval from "./hooks/useInterval";
 import getCellKey from "./utils/getCellKey";
 import getPlayableCells from "./utils/playableCells";
 import { AiFillSound, AiOutlineSound } from "react-icons/ai";
-import music from "./music/anaconda.mp3";
 import { useAuth } from "./context/auth-context";
+import { Howl } from "howler";
+import music from "./music/anaconda.mp3";
+import ReactHowler from "react-howler";
 
 const players = [PLAYER_ONE, PLAYER_TWO];
 
@@ -29,8 +30,18 @@ const initialState = {
   gameStatus: GAME_STATUS.READY,
 };
 
-function updateGame(game, action) {
+const sound = new Howl({
+  src: [music],
+  autoplay: true,
+  loop: true,
+  volume: 0.05,
+});
+
+function UpdateGame(game, action) {
   if (action.type === "start") {
+    if (!sound.playing()) {
+      sound.play()
+    }
     return { ...initialState, gameStatus: GAME_STATUS.PLAYING };
   }
 
@@ -97,10 +108,9 @@ function updateGame(game, action) {
 }
 
 function App() {
-  const [game, gameDispatch] = useReducer(updateGame, initialState);
+  const [game, gameDispatch] = useReducer(UpdateGame, initialState);
   const { soundStatus, setSoundStatus } = useAuth();
   let result = null;
-  console.log(game.gameStatus);
 
   useInterval(
     () => {
@@ -151,7 +161,7 @@ function App() {
 
   return (
     <div>
-      <ReactHowler src={music} playing={soundStatus} />
+      {/* <ReactHowler src={music} playing={soundStatus} /> */}
       <div
         style={{
           display: "flex",
@@ -160,15 +170,15 @@ function App() {
         }}
       >
         <h1>Anacondita</h1>
-        {soundStatus ? (
+        {sound.playing() ? (
           <AiFillSound
-            style={{ width: "40px", height: "40px" }}
-            onClick={() => setSoundStatus(false)}
+            style={{ width: "40px", height: "40px", cursor: "pointer" }}
+            onClick={() => sound.stop()}
           />
         ) : (
           <AiOutlineSound
-            style={{ width: "40px", height: "40px" }}
-            onClick={() => setSoundStatus(true)}
+            style={{ width: "40px", height: "40px", cursor: "pointer" }}
+            onClick={() => sound.play()}
           />
         )}
       </div>
