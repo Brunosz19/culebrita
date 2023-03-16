@@ -15,6 +15,7 @@ import getCellKey from "./utils/getCellKey";
 import getPlayableCells from "./utils/playableCells";
 import { AiFillSound, AiOutlineSound } from "react-icons/ai";
 import music from "./music/anaconda.mp3";
+import { useAuth } from "./context/auth-context";
 
 const players = [PLAYER_ONE, PLAYER_TWO];
 
@@ -97,7 +98,7 @@ function updateGame(game, action) {
 
 function App() {
   const [game, gameDispatch] = useReducer(updateGame, initialState);
-  const [soundStatus, setSoundStatus] = useState(true);
+  const { soundStatus, setSoundStatus } = useAuth();
   let result = null;
   console.log(game.gameStatus);
 
