@@ -18,6 +18,7 @@ export const BeforeStart = styled.div(`
 export default function Start({ onClick }) {
   return (
     <BeforeStart>
+      <h1> Anacondita </h1>
       <Button onClick={onClick}>Comenzar</Button>
     </BeforeStart>
   );
