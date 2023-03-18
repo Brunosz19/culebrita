@@ -37,9 +37,6 @@ const sound = new Howl({
 
 function UpdateGame(game, action) {
   if (action.type === "start") {
-    if (!sound.playing()) {
-      sound.play()
-    }
     return { ...initialState, gameStatus: GAME_STATUS.PLAYING };
   }
 
